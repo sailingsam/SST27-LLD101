@@ -12,5 +12,10 @@ public class Demo01 {
         // Process order
         orderService.checkout("a@shop.com", 100.0);
         
+        // Demo: Easy to test with different implementations
+        System.out.println("\n--- Demo with different tax rate ---");
+        TaxCalculator highTaxCalculator = new StandardTaxCalculator(0.25);
+        OrderService premiumOrderService = new OrderService(emailService, highTaxCalculator, orderRepository);
+        premiumOrderService.checkout("premium@shop.com", 100.0);
     }
 }
