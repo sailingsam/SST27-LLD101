@@ -1,7 +1,11 @@
 public class Frame { 
-    byte[] data; 
-    Frame(byte[] d)
-    { 
-        this.data=d; 
+    private byte[] data;  // Made private for better encapsulation
+    
+    public Frame(byte[] d) { 
+        this.data = d; 
     } 
+    
+    public byte[] getData() {
+        return data;
+    }
 }
