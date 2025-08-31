@@ -1,12 +1,27 @@
 package com.example.orders;
 
-public class OrderLine {
-    private String sku;
-    private int quantity;
-    private int unitPriceCents;
+/**
+ * Immutable OrderLine - no setters, all fields final.
+ * Prevents corruption of Order totals.
+ */
+public final class OrderLine {
+    private final String sku;
+    private final int quantity;
+    private final int unitPriceCents;
 
     public OrderLine(String sku, int quantity, int unitPriceCents) {
-        this.sku = sku;
+        // Basic validation
+        if (sku == null || sku.trim().isEmpty()) {
+            throw new IllegalArgumentException("SKU cannot be null or empty");
+        }
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be positive");
+        }
+        if (unitPriceCents < 0) {
+            throw new IllegalArgumentException("Unit price cannot be negative");
+        }
+        
+        this.sku = sku.trim();
         this.quantity = quantity;
         this.unitPriceCents = unitPriceCents;
     }
@@ -15,5 +30,15 @@ public class OrderLine {
     public int getQuantity() { return quantity; }
     public int getUnitPriceCents() { return unitPriceCents; }
 
-    public void setQuantity(int q) { this.quantity = q; }
+    // No setters - immutable!
+    
+    public int getLineTotalCents() {
+        return quantity * unitPriceCents;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("OrderLine{sku='%s', qty=%d, price=%d cents}", 
+                           sku, quantity, unitPriceCents);
+    }
 }
