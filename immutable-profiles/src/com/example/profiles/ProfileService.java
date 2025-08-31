@@ -1,28 +1,70 @@
 package com.example.profiles;
 
-import java.util.Objects;
-
 /**
- * Assembles profiles with scattered, inconsistent validation.
+ * Assembles immutable profiles using the Builder pattern.
+ * No mutation after creation - all validation centralized in Builder.
  */
 public class ProfileService {
 
-    // returns a fully built profile but mutates it afterwards (bug-friendly)
+    /**
+     * Creates a minimal profile with just required fields.
+     * Returns an immutable UserProfile - no mutation possible.
+     */
     public UserProfile createMinimal(String id, String email) {
-        if (id == null || id.isBlank()) throw new IllegalArgumentException("bad id");
-        if (email == null || !email.contains("@")) throw new IllegalArgumentException("bad email");
-
-        UserProfile p = new UserProfile(id, email);
-        // later code keeps mutating...
-        return p;
+        return UserProfile.builder()
+                .id(id)
+                .email(email)
+                .build(); // Validation happens here
     }
 
-    public void updateDisplayName(UserProfile p, String displayName) {
-        Objects.requireNonNull(p, "profile");
-        if (displayName != null && displayName.length() > 100) {
-            // silently trim (inconsistent policy)
-            displayName = displayName.substring(0, 100);
-        }
-        p.setDisplayName(displayName); // mutability leak
+    /**
+     * Creates a profile with additional optional fields.
+     * All validation and business rules applied consistently.
+     */
+    public UserProfile createProfile(String id, String email, String displayName, 
+                                   String phone, String address, boolean marketingOptIn) {
+        return UserProfile.builder()
+                .id(id)
+                .email(email)
+                .displayName(displayName)
+                .phone(phone)
+                .address(address)
+                .marketingOptIn(marketingOptIn)
+                .build(); // All validation happens in one place
+    }
+
+    /**
+     * Creates a full profile with social media handles.
+     */
+    public UserProfile createFullProfile(String id, String email, String displayName,
+                                       String phone, String address, boolean marketingOptIn,
+                                       String twitter, String github) {
+        return UserProfile.builder()
+                .id(id)
+                .email(email)
+                .displayName(displayName)
+                .phone(phone)
+                .address(address)
+                .marketingOptIn(marketingOptIn)
+                .twitter(twitter)
+                .github(github)
+                .build(); // Centralized validation
+    }
+
+    /**
+     * Since UserProfile is now immutable, we return a new instance
+     * instead of mutating the existing one.
+     */
+    public UserProfile withUpdatedDisplayName(UserProfile existing, String newDisplayName) {
+        return UserProfile.builder()
+                .id(existing.getId())
+                .email(existing.getEmail())
+                .phone(existing.getPhone())
+                .displayName(newDisplayName) // New display name
+                .address(existing.getAddress())
+                .marketingOptIn(existing.isMarketingOptIn())
+                .twitter(existing.getTwitter())
+                .github(existing.getGithub())
+                .build(); // Validation ensures consistency
     }
 }
