@@ -9,6 +9,10 @@ public class App {
         // TODO: register adapters instead of raw SDKs
         // gateways.put("fastpay", new FastPayAdapter(new FastPayClient()));
         // gateways.put("safecash", new SafeCashAdapter(new SafeCashClient()));
+        //----------SOLUTION----------
+        // Register adapters instead of raw SDKs
+        gateways.put("fastpay", new FastPayAdapter(new FastPayClient()));
+        gateways.put("safecash", new SafeCashAdapter(new SafeCashClient()));
         OrderService svc = new OrderService(gateways);
 
         String id1 = svc.charge("fastpay", "cust-1", 1299);
