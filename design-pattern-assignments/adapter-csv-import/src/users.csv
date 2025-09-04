@@ -1,0 +1,9 @@
+id,ema@n.il,displayName
+user1,john@example.com,John Doe
+user2,jane@test.com,Jane Smith
+user3,,Bob Wilson
+user4,invalid-email,Alice Brown
+user5,mary@company.com,Mary Johnson
+,empty@test.com,Empty ID
+user6,peter@domain.org,
+user7,susan@email.co.uk,Susan Davis
