@@ -12,28 +12,48 @@ public class GameDemo {
         base.move();
         base.attack();
 
-        // === YOUR TASKS ===
-        // 1) Create CharacterDecorator that implements Character and wraps another Character.
-        // 2) Create concrete decorators, for example:
-        //      - SpeedBoost (adds +N to speed, overrides getSpeed() and move() print)
-        //      - DamageBoost (adds +N to damage, overrides getDamage() and attack() print)
-        //      - GoldenAura (changes sprite, small buffs, logs aura on actions)
-        // 3) Show composition:
-        //      a) Base + SpeedBoost + DamageBoost
-        //      b) Add GoldenAura (sprite change + buffs)
-        //      c) Remove GoldenAura by recomposing (rebuild chain without it)
-        //
-        // Example (after you implement):
-        // Character buffed = new DamageBoost(new SpeedBoost(base, 3), 15);
-        // buffed.move();
-        // buffed.attack();
-        //
-        // Character shiny = new GoldenAura(buffed);
-        // shiny.move();
-        // shiny.attack();
-        //
-        // Character withoutAura = buffed; // removal by recomposition
-        // withoutAura.move();
-        // withoutAura.attack();
+        System.out.println("\n=== Decorator Pattern Power-ups ===\n");
+        
+        // a) Base + SpeedBoost + DamageBoost
+        System.out.println("--- Base + SpeedBoost(+3) + DamageBoost(+15) ---");
+        Character buffed = new DamageBoost(new SpeedBoost(base, 3), 15);
+        System.out.println("Stats: Speed=" + buffed.getSpeed() + ", Damage=" + buffed.getDamage() + ", Sprite=" + buffed.getSprite());
+        buffed.move();
+        buffed.attack();
+        
+        // b) Add GoldenAura (sprite change + buffs)
+        System.out.println("\n--- Adding GoldenAura (sprite change + small buffs) ---");
+        Character shiny = new GoldenAura(buffed);
+        System.out.println("Stats: Speed=" + shiny.getSpeed() + ", Damage=" + shiny.getDamage() + ", Sprite=" + shiny.getSprite());
+        shiny.move();
+        shiny.attack();
+        
+        // c) Remove GoldenAura by recomposing (rebuild chain without it)
+        System.out.println("\n--- Removing GoldenAura (recomposition) ---");
+        Character withoutAura = buffed; // reference to the buffed character without golden aura
+        System.out.println("Stats: Speed=" + withoutAura.getSpeed() + ", Damage=" + withoutAura.getDamage() + ", Sprite=" + withoutAura.getSprite());
+        withoutAura.move();
+        withoutAura.attack();
+        
+        // Bonus: Show stacking multiple same decorators
+        System.out.println("\n--- Bonus: Double Speed Boost ---");
+        Character superFast = new SpeedBoost(new SpeedBoost(base, 5), 5);
+        System.out.println("Stats: Speed=" + superFast.getSpeed() + ", Damage=" + superFast.getDamage() + ", Sprite=" + superFast.getSprite());
+        superFast.move();
+        
+        // Bonus: Complex composition
+        System.out.println("\n--- Bonus: Ultimate Character ---");
+        Character ultimate = new GoldenAura(
+            new DamageBoost(
+                new SpeedBoost(
+                    new DamageBoost(base, 10), 
+                    8
+                ), 
+                20
+            )
+        );
+        System.out.println("Stats: Speed=" + ultimate.getSpeed() + ", Damage=" + ultimate.getDamage() + ", Sprite=" + ultimate.getSprite());
+        ultimate.move();
+        ultimate.attack();
     }
 }
